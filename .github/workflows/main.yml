@@ -18,11 +18,18 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Pulse
+      - name: Pulse A
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GV_GATEWAY: ${{ secrets.GV_GATEWAY }}
+        run: python main.py
+
+      - name: Pulse B
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER_B }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD_B }}
+          GV_GATEWAY: ${{ secrets.GV_GATEWAY_B }}
         run: python main.py
 
       - name: Update keepalive log
