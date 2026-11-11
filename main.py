@@ -3,7 +3,7 @@ import os
 import random
 from collections import namedtuple
 from email.mime.text import MIMEText
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 SMTP_HOST = 'smtp.gmail.com'
 SMTP_PORT = 465
@@ -11,6 +11,7 @@ SMTP_TIMEOUT_SECONDS = 30
 
 SUBJECT = 'GV Maintenance'
 TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M'
+TAIPEI_TZ = timezone(timedelta(hours=8))
 MESSAGE_LINES = (
     "Update: System is running smoothly.",
     "Reminder: Keep active and stay connected.",
@@ -36,7 +37,7 @@ def load_settings() -> Settings | None:
 
 
 def compose_message(settings: Settings, line: str) -> MIMEText:
-    content = f"{line} | Time: {datetime.now().strftime(TIMESTAMP_FORMAT)}"
+    content = f"{line} | Time: {datetime.now(TAIPEI_TZ).strftime(TIMESTAMP_FORMAT)}"
     message = MIMEText(content)
     message['Subject'] = SUBJECT
     message['From'] = settings.username
