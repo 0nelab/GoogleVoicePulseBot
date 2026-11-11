@@ -2,12 +2,14 @@ import smtplib
 import os
 import random
 from email.mime.text import MIMEText
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+TAIPEI = timezone(timedelta(hours=8))
 
 def send_mail():
     # Credentials pulled dynamically from GitHub Secrets
     username = os.environ.get('GMAIL_USER')
-    password = os.environ.get('GMAIL_PASSWORD')
+    password = <REDACTED_SECRET>'GMAIL_PASSWORD')
     receiver = os.environ.get('GV_GATEWAY')
     
     # Optional overrides for SMTP Relay routing
@@ -24,7 +26,7 @@ def send_mail():
         "Monthly check-in: Hello world!",
         "Status: All systems go."
     ]
-    content = f"{random.choice(msgs)} | Time: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+    content = f"{random.choice(msgs)} | Time: {datetime.now(TAIPEI).strftime('%Y-%m-%d %H:%M')}"
 
     # Construct the message payload
     msg = MIMEText(content)
@@ -37,7 +39,7 @@ def send_mail():
         with smtplib.SMTP_SSL(smtp_host, 465) as server:
             server.login(username, password)
             server.sendmail(envelope_sender, [receiver], msg.as_string())
-        print(f"[{datetime.now()}] Successfully sent to: {receiver}")
+        print(f"[{datetime.now(TAIPEI)}] Successfully sent to: {receiver}")
     except Exception as e:
         print(f"Send failed: {e}")
 
